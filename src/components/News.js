@@ -39,23 +39,44 @@ export default class News extends Component {
     super();
     this.state = {
       articles:[],
-      loading: false
+      loading: false,
+      page:1
     }
   }
 // Fetching API
   async componentDidMount(){
-    let url = "https://newsapi.org/v2/top-headlines?country=in&category&apiKey=1ed0d96dc1bd446186fbf911a1d833fc";
+    let url = "https://newsapi.org/v2/top-headlines?country=in&category&apiKey=1ed0d96dc1bd446186fbf911a1d833fc&page=1&pageSize=12";
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
     this.setState({articles: parsedData.articles})
   }
 
+    handlePrevClick = async () =>{
+      let url = `https://newsapi.org/v2/top-headlines?country=in&category&apiKey=1ed0d96dc1bd446186fbf911a1d833fc&page=${this.state.page-1}&pageSize=12`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      this.setState({
+        page: this.state.page - 1,
+        articles: parsedData.articles})
+    }
+
+    handleNextClick = async () =>{
+      let url = `https://newsapi.org/v2/top-headlines?country=in&category&apiKey=1ed0d96dc1bd446186fbf911a1d833fc&page=${this.state.page+1}&pageSize=12`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      console.log(parsedData);
+      this.setState({
+        page: this.state.page + 1,
+        articles: parsedData.articles})
+
+    }
   render() {
     return (
 
         <div className="container my-3">
-             <h2>NewsMonkey Top Headlines</h2>
+             <h2 className="text-center">NewsMonkey Top Headlines</h2>
              <div className="row">
              {this.state.articles.map((element)=>{
                  return <div className="col-md-4" key={element.url}>
@@ -64,6 +85,10 @@ export default class News extends Component {
                  </div>
                              
              })}
+        </div>
+        <div className="d-flex justify-content-between">
+        <button disabled = {this.state.page <= 1} type="button" className="btn btn-primary" onClick={this.handlePrevClick}>&larr; Previous</button>
+        <button disabled = {this.state.page == 4}type="button" className="btn btn-primary" onClick={this.handleNextClick}>Next &rarr;</button>
         </div>
       </div>
     );
