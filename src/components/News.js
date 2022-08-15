@@ -102,7 +102,7 @@ export default class News extends Component {
         <div className="container my-3">
              <h2 className="text-center">NewsMonkey Top Headlines</h2>
              {/* spinnner */}
-             <div className="text-center">
+             <div className="d-flex justify-content-center mt-3 py-3">
               {this.state.loading && <Spinner/>}   
             </div>
              <div className="row">
